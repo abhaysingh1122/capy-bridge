@@ -296,20 +296,23 @@ class ClaudeSDKManager:
                 stderr_lines.append(line)
                 logger.debug("Claude CLI stderr", line=line)
 
-            # Build system prompt: Capybara persona + sandbox rule + optional CLAUDE.md
+            # Build system prompt: persona + sandbox rule + optional CLAUDE.md
             base_prompt = (
                 f"All file operations must stay within {working_directory}. "
                 "Use relative paths."
             )
-            # Load Capybara persona + local context map (our variant feature).
-            # persona.md is public; CONTEXT.local.md is gitignored/private.
+            # Load persona + optional local context map.
+            # A private "persona.local.md" (gitignored) overrides the public
+            # "persona.md" template. "CONTEXT.local.md" is gitignored/private.
             repo_root = Path(__file__).resolve().parents[2]
-            persona_path = repo_root / "persona.md"
+            persona_path = repo_root / "persona.local.md"
+            if not persona_path.exists():
+                persona_path = repo_root / "persona.md"
             if persona_path.exists():
                 base_prompt = (
                     persona_path.read_text(encoding="utf-8") + "\n\n" + base_prompt
                 )
-                logger.info("Loaded Capybara persona", path=str(persona_path))
+                logger.info("Loaded persona", path=str(persona_path))
             context_path = repo_root / "CONTEXT.local.md"
             if context_path.exists():
                 base_prompt = (

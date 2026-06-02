@@ -1,8 +1,8 @@
-# 🦫 capy-bridge
+# capy-bridge
 
 **Control Claude Code on your computer — from your phone, over Telegram.**
 
-capy-bridge turns Claude Code into **Capybara**: a chill, always-on AI sidekick you talk to from anywhere. Text it and it reads, writes, runs commands, and builds on your machine — with full conversation memory and an actual personality.
+capy-bridge turns Claude Code into your own AI sidekick that you can talk to from anywhere. Text it and it reads, writes, runs commands, and builds on your machine — with full conversation memory and a personality **you** define.
 
 No API key. No cloud. It runs on *your* machine, on *your* existing Claude Code login.
 
@@ -15,7 +15,7 @@ You're not always at your desk. Ideas, fixes, and "oh I should build that" momen
 ## Features
 
 - 📱 **Full Claude Code over Telegram** — chat naturally, no terminal needed
-- 🦫 **Custom persona** — Capybara's voice lives in [`persona.md`](persona.md); edit it to whatever you want
+- 🎭 **Bring your own persona** — define your assistant's name and voice in [`persona.md`](persona.md); it's a template you customize
 - 🔐 **Locked to you** — whitelist by Telegram user ID; nobody else can talk to it
 - 💾 **Persistent, resumable conversations** — pick up where you left off
 - 🧠 **Runs on your Claude Code login** — no Anthropic API key required
@@ -62,8 +62,8 @@ USE_SDK=true                                  # use your Claude Code login (no A
 ```
 > ⚠️ Never commit `.env` — it's gitignored for a reason. Your token is a password.
 
-### Step 5 — (Optional) Give it a personality
-Edit [`persona.md`](persona.md) — its contents are prepended to the system prompt on every message, so you can make your assistant talk however you like. Want private, machine-only context (paths, notes)? Put it in a `CONTEXT.local.md` file (gitignored) and it'll load too.
+### Step 5 — Name it & give it a personality
+Edit [`persona.md`](persona.md) — its contents are prepended to the system prompt on every message, so you decide your assistant's name, voice, and rules. Want to keep your persona private (not committed)? Put it in `persona.local.md` (gitignored) and it'll be used instead. The same works for private machine context — drop it in `CONTEXT.local.md`.
 
 ### Step 6 — Run it
 ```bash
@@ -77,7 +77,7 @@ make run
 ```
 
 ### Step 7 — Use it
-Message your bot on Telegram. Say hi. It's now running on your machine. 🦫
+Message your bot on Telegram. Say hi. It's now running on your machine.
 
 ---
 

@@ -1,8 +1,8 @@
 """capy-bridge.
 
 Control Claude Code on your computer from your phone, over Telegram.
-Meet Capybara — a chill, always-on AI sidekick with full access to your
-machine, running on your existing Claude Code login.
+A self-hosted assistant with full access to your machine, running on
+your existing Claude Code login.
 """
 
 import tomllib

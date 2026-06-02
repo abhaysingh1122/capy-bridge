@@ -1,13 +1,13 @@
 [project]
 name = "capy-bridge"
 version = "0.1.0"
-description = "Control Claude Code on your computer from your phone, over Telegram. Meet Capybara."
+description = "Control Claude Code on your computer from your phone, over Telegram."
 readme = "README.md"
 license = "MIT"
 authors = [
     {name = "Abhay Singh"},
 ]
-keywords = ["telegram", "bot", "claude", "claude-code", "ai", "assistant", "remote", "capybara"]
+keywords = ["telegram", "bot", "claude", "claude-code", "ai", "assistant", "remote"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",

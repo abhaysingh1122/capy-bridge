@@ -15,51 +15,96 @@ You're not always at your desk. Ideas, fixes, and "oh I should build that" momen
 ## Features
 
 - 📱 **Full Claude Code over Telegram** — chat naturally, no terminal needed
-- 🦫 **Custom persona** — Capybara's voice lives in [`persona.md`](persona.md), edit it to whatever you want
+- 🦫 **Custom persona** — Capybara's voice lives in [`persona.md`](persona.md); edit it to whatever you want
 - 🔐 **Locked to you** — whitelist by Telegram user ID; nobody else can talk to it
 - 💾 **Persistent, resumable conversations** — pick up where you left off
 - 🧠 **Runs on your Claude Code login** — no Anthropic API key required
 - 🛠️ **Real power** — read/write files, run commands, git, file & image uploads
 - 🧱 **Safe by default** — directory sandboxing, rate limiting, audit logging
 
-## Quick start
+---
 
-**Prerequisites:** Python 3.11+, the [Claude Code CLI](https://claude.ai/code) (logged in), a Telegram bot token from [@BotFather](https://t.me/botfather), and [`uv`](https://github.com/astral-sh/uv).
+## Setup (zero → running)
 
+### Prerequisites
+- **Python 3.11+** — https://www.python.org/downloads/
+- **Claude Code CLI**, logged in — https://claude.ai/code (run `claude auth login` once; verify with `claude auth status`)
+- **[uv](https://github.com/astral-sh/uv)** — fast Python package manager
+- A **Telegram** account
+
+### Step 1 — Create your bot
+1. Open Telegram and message [@BotFather](https://t.me/botfather)
+2. Send `/newbot`, give it a display name and a username ending in `bot`
+3. Copy the **bot token** it gives you (looks like `1234567890:AA...`)
+
+### Step 2 — Get your Telegram user ID
+Message [@userinfobot](https://t.me/userinfobot) — it replies with your numeric **user ID**. This is your whitelist; only this ID will be allowed to talk to your bot.
+
+### Step 3 — Install
 ```bash
 git clone https://github.com/abhaysingh1122/capy-bridge.git
 cd capy-bridge
 uv venv --python 3.12
 uv pip install -e .
-cp .env.example .env        # then fill in the values below
 ```
 
-Minimum `.env`:
-
+### Step 4 — Configure
 ```bash
-TELEGRAM_BOT_TOKEN=...        # from @BotFather
-TELEGRAM_BOT_USERNAME=...     # your bot's username
-APPROVED_DIRECTORY=...        # base folder the bot may access
-ALLOWED_USERS=123456789       # your Telegram user ID (from @userinfobot)
-USE_SDK=true                  # use your existing Claude Code login (no API key)
+cp .env.example .env
 ```
-
-Run it:
-
+Open `.env` and set at minimum:
 ```bash
-./.venv/Scripts/claude-telegram-bot        # Windows
-# or: make run
+TELEGRAM_BOT_TOKEN=your_token_from_botfather
+TELEGRAM_BOT_USERNAME=your_bot_username      # without the @
+APPROVED_DIRECTORY=/absolute/path/to/projects # the folder the bot may access
+ALLOWED_USERS=123456789                       # YOUR Telegram user ID from Step 2
+USE_SDK=true                                  # use your Claude Code login (no API key)
+```
+> ⚠️ Never commit `.env` — it's gitignored for a reason. Your token is a password.
+
+### Step 5 — (Optional) Give it a personality
+Edit [`persona.md`](persona.md) — its contents are prepended to the system prompt on every message, so you can make your assistant talk however you like. Want private, machine-only context (paths, notes)? Put it in a `CONTEXT.local.md` file (gitignored) and it'll load too.
+
+### Step 6 — Run it
+```bash
+# Windows
+./.venv/Scripts/claude-telegram-bot
+
+# macOS / Linux
+.venv/bin/claude-telegram-bot
+# or simply:
+make run
 ```
 
-Then message your bot. That's it. 🦫
+### Step 7 — Use it
+Message your bot on Telegram. Say hi. It's now running on your machine. 🦫
 
-## The persona
+---
 
-Capybara's character is just a text file — [`persona.md`](persona.md) — prepended to the system prompt on every message. Rewrite it to make your assistant talk however you like.
+## Troubleshooting
+
+**Bot doesn't reply at all**
+- Double-check `TELEGRAM_BOT_TOKEN` is correct
+- Make sure your user ID is in `ALLOWED_USERS` (anyone else is silently rejected — by design)
+
+**"Claude" errors / auth failures**
+- Run `claude auth status` — you must be logged in
+- With `USE_SDK=true` and an empty `ANTHROPIC_API_KEY`, it uses your existing Claude Code login
+
+**Want it always-on?**
+- Keep the machine awake and the process running (e.g. a Windows Task Scheduler entry on login, a `systemd` service on Linux, or `tmux` on macOS)
+
+---
 
 ## Configuration
 
 Every option is documented in [`.env.example`](.env.example) — model settings, rate limits, voice transcription, sandboxing, and more.
+
+## Security
+
+- **Whitelist-only access** — set `ALLOWED_USERS` to your own Telegram ID; everyone else is rejected before reaching Claude
+- **Directory sandboxing** — the bot can only touch files under `APPROVED_DIRECTORY`
+- Treat your bot token like a password. Keep `.env` out of git (it already is).
 
 ## License
 
